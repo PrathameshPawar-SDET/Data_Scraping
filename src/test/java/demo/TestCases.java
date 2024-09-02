@@ -76,6 +76,7 @@ public class TestCases {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         driver.get("https://www.scrapethissite.com/pages/");
 
+        System.out.println("Navigating to 'Hockey Teams: Forms, Searching and Pagination'");
         Wrappers.click(driver,Hockeyteam);
         List<HashMap<String,Object>> HockeyTeams = new ArrayList<>();
 
@@ -109,6 +110,7 @@ public class TestCases {
 
             ObjectMapper mapper = new ObjectMapper();
             try {
+                System.out.println("Writing Hockey Teams data to JSON file...");
                 mapper.writeValue(new File("hockey-team-data.json"),HockeyTeams);
 
             }catch (IOException e){
@@ -120,11 +122,12 @@ public class TestCases {
 
     }
     @Test(enabled = true)
-    public void testCase2() throws InterruptedException {
+    public void testCase02() throws InterruptedException {
         System.out.println("Starting with testCase 02");
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         driver.get("https://www.scrapethissite.com/pages/");
 
+        System.out.println("Navigating to 'Oscar Winning Films'");
         Wrappers.click(driver,oscarWinning);
         List<HashMap<String,Object>> MovieList = new ArrayList<>();
 
@@ -138,6 +141,8 @@ public class TestCases {
                 String title = row.findElement(By.xpath("./td[@class='film-title']")).getText().trim();
                 String Nomination = row.findElement(By.xpath("./td[@class='film-nominations']")).getText().trim();
                 String Awards = row.findElement(By.xpath("./td[@class='film-awards']")).getText().trim();
+
+                // Initialize isWinner to false for all rows
                 boolean isWinner = false;
 
                 try {
@@ -147,6 +152,7 @@ public class TestCases {
                     }
                 } catch (NoSuchElementException e) {
 
+                    // If the element is not found, it means this movie is not the Best Picture winner
                     isWinner = false;
                 }
                 long epochtime = Wrappers.getCurrentEpochTime();
@@ -161,6 +167,7 @@ public class TestCases {
                 MovieList.add(MovieData);
 
             }
+            System.out.println("Navigating back to the list of years...");
             driver.navigate().back();
         }
         ObjectMapper mapper = new ObjectMapper();
@@ -170,6 +177,7 @@ public class TestCases {
         }
         File jsonfile = new File(outputfolder,"oscar-winner-data.json");
         try {
+            System.out.println("Writing Oscar Winner data to JSON file...");
             mapper.writeValue(jsonfile,MovieList);
         }catch (IOException e){
             e.printStackTrace();
